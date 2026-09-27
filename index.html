@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday, Kesayangan! ✨ | A Special Birthday Celebration</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Sacramento&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              cream: '#FDFBFB',
+              offwhite: '#FAFAFA',
+              pink: {
+                50: '#FDF2F8',
+                100: '#FCE7F3',
+                200: '#FBCFE8',
+                300: '#F9A8D4',
+                400: '#F472B6',
+                500: '#EC4899',
+                600: '#DB2777',
+              },
+              rose: {
+                100: '#FFE4E6',
+                200: '#FECDD3',
+                400: '#FB7185',
+                500: '#F43F5E',
+                600: '#E11D48',
+              },
+              sage: {
+                50: '#F0FDF4',
+                100: '#DCFCE7',
+                200: '#BBF7D0',
+                300: '#86EFAC',
+                400: '#4ADE80',
+                accent: '#A7F3D0',
+                medium: '#6EE7B7',
+                deep: '#059669',
+              }
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            handwriting: ['Caveat', 'cursive'],
+            romantic: ['Sacramento', 'cursive'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons (Fast jsDelivr CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <!-- Alpine.js Application -->
+  <script src="assets/js/app.js"></script>
+  <!-- Alpine.js CDN (Pinned Version) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.5/dist/cdn.min.js"></script>
+</head>
+<body x-data="birthdayApp" class="bg-[#FDFBFB] text-gray-700 min-h-screen relative selection:bg-brand-pink-200 selection:text-brand-pink-600">
+
+  <!-- Falling Flower Petals Canvas -->
+  <canvas id="petals-canvas"></canvas>
+
+  <!-- Dreamy Background Glow Elements -->
+  <div class="ambient-glow-pink -top-24 -left-24 w-96 h-96 opacity-60"></div>
+  <div class="ambient-glow-sage top-1/4 -right-20 w-[420px] h-[420px] opacity-40"></div>
+  <div class="ambient-glow-pink top-2/3 -left-32 w-[480px] h-[480px] opacity-40"></div>
+  <div class="ambient-glow-sage bottom-12 right-10 w-96 h-96 opacity-45"></div>
+
+  <!-- ==========================================
+       HERO COVER SECTION (Interactive Greeting)
+       ========================================== -->
+  <section class="relative min-h-screen flex items-center justify-center px-4 py-16 overflow-hidden z-10">
+    <div class="max-w-3xl mx-auto text-center relative z-10">
+      
+      <!-- Aesthetic Badge -->
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-md border border-brand-pink-200/80 shadow-sm text-xs md:text-sm font-medium text-brand-pink-600 mb-6 animate-pulse">
+        <span class="inline-block w-2 h-2 rounded-full bg-brand-rose-400"></span>
+        <span>A Special Birthday Celebration ✨</span>
+        <span class="inline-block w-2 h-2 rounded-full bg-brand-sage-medium"></span>
+      </div>
+
+      <!-- Main Animated Heading -->
+      <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-gray-800 leading-[1.15] mb-6">
+        Happy Birthday, <br class="hidden sm:inline" />
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-rose-500 via-brand-pink-500 to-brand-sage-deep" x-text="celebrant.name">
+          Sabrina Aulia Putri
+        </span>! ✨
+      </h1>
+
+      <!-- Warm Subheading -->
+      <p class="text-base sm:text-lg md:text-xl text-gray-600 max-w-xl mx-auto font-light leading-relaxed mb-10">
+        Sebuah ruang kecil penuh kehangatan dan kenangan manis, khusus dirangkai untuk merayakan hadirnya dirimu di dunia ini.
+      </p>
+
+      <!-- Interactive Call-To-Action Button -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <button 
+          @click="unlockSurprise()"
+          class="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full font-medium text-white text-base shadow-lg shadow-brand-pink-300/40 hover:shadow-xl hover:shadow-brand-pink-400/50 bg-gradient-to-r from-brand-pink-400 via-brand-rose-400 to-brand-pink-500 hover:scale-105 active:scale-95 transition-all duration-300"
+        >
+          <span>Open Your Birthday Letter 💌</span>
+          <i data-lucide="sparkles" class="w-5 h-5 transition-transform group-hover:rotate-12"></i>
+        </button>
+
+        <a 
+          href="#photo-gallery" 
+          class="inline-flex items-center gap-2 px-6 py-4 rounded-full font-medium text-gray-600 bg-white/80 hover:bg-white border border-gray-200/80 shadow-sm hover:shadow hover:text-brand-pink-500 transition-all duration-300 text-sm md:text-base"
+        >
+          <span>Jelajahi Kenangan</span>
+          <i data-lucide="arrow-down" class="w-4 h-4"></i>
+        </a>
+      </div>
+
+      <!-- Live Age / Happiness Stats Quick Banner -->
+      <div class="mt-14 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-2xl mx-auto">
+        <div class="glass-card rounded-2xl p-4 text-center">
+          <div class="text-2xl sm:text-3xl font-bold font-serif text-brand-rose-500" x-text="counter.days.toLocaleString('id-ID')">0</div>
+          <div class="text-xs uppercase tracking-wider text-gray-500 mt-1 font-medium">Hari Bahagia</div>
+        </div>
+        <div class="glass-card rounded-2xl p-4 text-center">
+          <div class="text-2xl sm:text-3xl font-bold font-serif text-brand-sage-deep" x-text="counter.hours">0</div>
+          <div class="text-xs uppercase tracking-wider text-gray-500 mt-1 font-medium">Jam Bersinar</div>
+        </div>
+        <div class="glass-card rounded-2xl p-4 text-center">
+          <div class="text-2xl sm:text-3xl font-bold font-serif text-brand-pink-500" x-text="counter.minutes">0</div>
+          <div class="text-xs uppercase tracking-wider text-gray-500 mt-1 font-medium">Menit Tawa</div>
+        </div>
+        <div class="glass-card rounded-2xl p-4 text-center">
+          <div class="text-2xl sm:text-3xl font-bold font-serif text-brand-rose-400" x-text="counter.seconds">0</div>
+          <div class="text-xs uppercase tracking-wider text-gray-500 mt-1 font-medium">Detik Syukur</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Soft Floating Decorative Elements -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-gray-400 animate-bounce flex flex-col items-center gap-1 opacity-70">
+      <span class="text-xs tracking-widest font-medium uppercase text-gray-400">Scroll Down</span>
+      <i data-lucide="chevron-down" class="w-4 h-4"></i>
+    </div>
+  </section>
+
+
+  <!-- ==========================================
+       SECTION: BIRTHDAY MESSAGE & SECRET ENVELOPE
+       ========================================== -->
+  <section id="surprise-content" class="relative py-20 px-4 z-10">
+    <div class="max-w-4xl mx-auto">
+      
+      <!-- Section Header -->
+      <div class="text-center mb-12">
+        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest bg-brand-pink-100 text-brand-pink-600 mb-2">
+          Surat Rahasia Untukmu
+        </span>
+        <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800">
+          A Message from the Heart 💌
+        </h2>
+        <p class="text-gray-500 text-sm sm:text-base mt-2 max-w-lg mx-auto">
+          Klik amplop di bawah ini untuk membuka lembaran surat yang ditulis khusus untukmu di hari bertambahnya usiamu.
+        </p>
+      </div>
+
+      <!-- Interactive 3D Envelope -->
+      <div class="envelope-wrapper my-10 flex flex-col items-center">
+        <div 
+          class="envelope-box" 
+          :class="{ 'is-open': envelopeOpen }"
+          @click="toggleEnvelope()"
+          title="Klik untuk membuka / menutup amplop"
+        >
+          <!-- Flap -->
+          <div class="envelope-flap"></div>
+
+          <!-- Wax Seal -->
+          <div class="wax-seal">
+            <i data-lucide="heart" class="w-6 h-6 fill-current text-white"></i>
+          </div>
+
+          <!-- Letter sliding inside -->
+          <div class="letter-inside flex flex-col justify-between overflow-hidden">
+            <div>
+              <div class="flex items-center justify-between border-b border-brand-pink-100 pb-2 mb-2">
+                <span class="text-xs font-serif text-brand-pink-500 italic">Untukmu yang tersayang...</span>
+                <span class="text-xs text-gray-400">27 September</span>
+              </div>
+              <p class="font-handwriting text-xl sm:text-2xl text-gray-700 leading-tight">
+                "Selamat ulang tahun yang paling indah! Terima kasih telah lahir dan membawa sinar paling terang ke duniaku..."
+              </p>
+            </div>
+            <div class="flex justify-between items-center text-xs text-brand-rose-500 pt-2 border-t border-brand-pink-100">
+              <span class="font-handwriting text-lg">Dengan segenap cinta ❤️</span>
+              <span class="underline font-sans cursor-pointer hover:text-brand-pink-600" @click.stop="openFullLetter()">Buka Penuh ↗</span>
+            </div>
+          </div>
+
+          <!-- Envelope Pocket Folds -->
+          <div class="envelope-pocket">
+            <div class="envelope-left"></div>
+            <div class="envelope-right"></div>
+            <div class="envelope-bottom"></div>
+          </div>
+        </div>
+
+        <div class="mt-8 text-center">
+          <button 
+            @click="openFullLetter()"
+            class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-medium bg-white/80 hover:bg-white text-brand-rose-500 border border-brand-pink-200 shadow-sm hover:shadow transition-all"
+          >
+            <i data-lucide="book-open" class="w-4 h-4"></i>
+            <span>Baca Surat Versi Lengkap</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ==========================================
+       SECTION: PHOTO GALLERY & POLAROID SHOWCASE
+       ========================================== -->
+  <section id="photo-gallery" class="relative py-20 px-4 z-10 bg-gradient-to-b from-transparent via-brand-pink-50/40 to-transparent">
+    <div class="max-w-6xl mx-auto">
+      
+      <!-- Section Header -->
+      <div class="text-center mb-16">
+        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest bg-brand-sage-100 text-brand-sage-deep mb-2">
+          Album Kenangan Manis
+        </span>
+        <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800">
+          Captured Moments of Joy 📸
+        </h2>
+        <p class="text-gray-500 text-sm sm:text-base mt-2 max-w-lg mx-auto">
+          Setiap senyum dan tawa yang pernah kita bagi, terabadikan abadi dalam bingkai kenangan ini. Klik foto untuk melihat cerita lengkapnya.
+        </p>
+      </div>
+
+      <!-- Polaroid Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 px-2 sm:px-4">
+        <template x-for="photo in photos" :key="photo.id">
+          <div 
+            class="polaroid-card group"
+            :class="photo.rotation"
+            @click="openPhotoModal(photo)"
+          >
+            <!-- Washi Tape Effect -->
+            <div :class="photo.tapeType === 'pink' ? 'washi-tape-pink' : 'washi-tape-sage'"></div>
+
+            <!-- Photo Container -->
+            <div class="polaroid-photo-wrapper aspect-[4/5] bg-gray-100">
+              <img 
+                :src="photo.src" 
+                :alt="photo.title"
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+              />
+            </div>
+
+            <!-- Polaroid Bottom Caption -->
+            <div class="mt-4 flex items-center justify-between">
+              <div>
+                <h3 class="font-handwriting text-2xl font-semibold text-gray-800" x-text="photo.title"></h3>
+                <span class="text-xs text-gray-400 block -mt-1" x-text="photo.date"></span>
+              </div>
+              <button 
+                @click.stop="likePhoto(photo)"
+                class="flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border border-pink-100 bg-pink-50/70 hover:bg-pink-100/70 transition-colors"
+                :class="{ 'text-brand-rose-500': photo.isLiked, 'text-gray-400': !photo.isLiked }"
+              >
+                <i data-lucide="heart" class="w-3.5 h-3.5" :class="{ 'fill-current': photo.isLiked }"></i>
+                <span x-text="photo.likes"></span>
+              </button>
+            </div>
+          </div>
+        </template>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ==========================================
+       SECTION: VIRTUAL CAKE & BLOW THE CANDLE
+       ========================================== -->
+  <section class="relative py-20 px-4 z-10">
+    <div class="max-w-2xl mx-auto">
+      <div class="glass-card rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden">
+        
+        <!-- Background Glow -->
+        <div class="ambient-glow-pink -top-12 -right-12 w-48 h-48 opacity-40"></div>
+
+        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest bg-brand-rose-100 text-brand-rose-600 mb-3">
+          Make a Wish
+        </span>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-gray-800 mb-2">
+          Make a Birthday Wish! 🎂
+        </h2>
+        <p class="text-gray-500 text-sm max-w-md mx-auto mb-8">
+          Pejamkan mata sejenak, ucapkan doa paling tulus di dalam hati, lalu tiup lilin ulang tahunmu!
+        </p>
+
+        <!-- Virtual Birthday Cake Graphic -->
+        <div class="relative w-48 h-48 mx-auto flex flex-col items-center justify-end mb-6">
+          
+          <!-- Candle & Flame -->
+          <div class="relative flex flex-col items-center mb-1">
+            <!-- Flame (Visible when candleLit) -->
+            <div x-show="candleLit" class="candle-flame mb-1 transition-all"></div>
+
+            <!-- Smoke puff when blown -->
+            <div x-show="candleBlown" class="smoke-puff text-gray-400 text-lg mb-1">💨</div>
+
+            <!-- Candle Stick -->
+            <div class="w-3.5 h-14 bg-gradient-to-r from-pink-300 via-rose-200 to-pink-300 rounded-t-sm shadow-inner relative border-l border-white/60">
+              <div class="w-full h-1 bg-brand-rose-400/50 mt-2"></div>
+              <div class="w-full h-1 bg-brand-rose-400/50 mt-2"></div>
+              <div class="w-full h-1 bg-brand-rose-400/50 mt-2"></div>
+            </div>
+          </div>
+
+          <!-- Cake Tier Top -->
+          <div class="w-36 h-14 bg-gradient-to-r from-pink-100 via-rose-50 to-pink-100 rounded-t-2xl border-t-4 border-brand-pink-300 shadow-md relative z-10 flex items-center justify-around px-2">
+            <span class="text-xs">🍓</span>
+            <span class="text-xs">🌸</span>
+            <span class="text-xs">🍓</span>
+            <span class="text-xs">🌸</span>
+            <span class="text-xs">🍓</span>
+          </div>
+
+          <!-- Cake Tier Bottom -->
+          <div class="w-44 h-16 bg-gradient-to-r from-rose-200 via-pink-100 to-rose-200 rounded-b-xl border-t-2 border-brand-rose-300 shadow-lg relative flex items-center justify-center">
+            <span class="font-serif text-sm font-semibold text-brand-rose-500 tracking-wider">SWEET 19</span>
+          </div>
+
+          <!-- Cake Plate / Stand -->
+          <div class="w-52 h-3 bg-gray-200/80 rounded-full shadow-inner mt-0.5"></div>
+        </div>
+
+        <!-- Interactive Blow Candle Controls -->
+        <div class="flex items-center justify-center gap-3">
+          <button 
+            x-show="candleLit"
+            @click="blowCandle()"
+            class="inline-flex items-center gap-2 px-7 py-3 rounded-full font-medium text-white text-sm sm:text-base bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 shadow-md hover:shadow-lg transition-all scale-100 hover:scale-105 active:scale-95"
+          >
+            <span>Tiup Lilin 🕯️💨</span>
+          </button>
+
+          <button 
+            x-show="candleBlown"
+            @click="relightCandle()"
+            class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-medium text-gray-600 bg-white/90 border border-gray-200 text-sm hover:bg-white shadow-sm transition-all"
+          >
+            <i data-lucide="flame" class="w-4 h-4 text-amber-500"></i>
+            <span>Nyalakan Lilin Lagi</span>
+          </button>
+        </div>
+
+        <!-- Wish Confirmation Message -->
+        <div x-show="candleBlown" class="mt-6 p-4 rounded-2xl bg-brand-pink-50/80 border border-brand-pink-200 text-brand-pink-600 text-sm font-medium animate-fade-in">
+          ✨ Lilin berhasil ditiup! Semoga semua harapan dan doamu lekas diijabah oleh Tuhan. Amin! 🎉
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==========================================
+       SECTION: MEMORY TIMELINE & JOURNEY
+       ========================================== -->
+  <section class="relative py-20 px-4 z-10 bg-gradient-to-b from-transparent via-brand-sage-50/30 to-transparent">
+    <div class="max-w-4xl mx-auto">
+      
+      <!-- Section Header -->
+      <!-- <div class="text-center mb-16">
+        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest bg-brand-sage-100 text-brand-sage-deep mb-2">
+          Jejak Langkah Kita
+        </span>
+        <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800">
+          Our Precious Journey 🌿
+        </h2>
+        <p class="text-gray-500 text-sm sm:text-base mt-2 max-w-lg mx-auto">
+          Momen demi momen yang kita lewati, mengajarkan arti ketulusan, kebahagiaan, dan rasa saling memiliki.
+        </p>
+      </div> -->
+
+    </div>
+  </section>
+
+
+  <!-- ==========================================
+       SECTION: BIRTHDAY WISHES & BUCKET LIST
+       ========================================== -->
+  <section class="relative py-20 px-4 z-10">
+    <div class="max-w-4xl mx-auto">
+      
+      <!-- Section Header -->
+      <div class="text-center mb-16">
+        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest bg-brand-pink-100 text-brand-pink-600 mb-2">
+          Daftar Harapan & Impian
+        </span>
+        <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800">
+          Birthday Wishlist & Dreams ✨
+        </h2>
+        <p class="text-gray-500 text-sm sm:text-base mt-2 max-w-lg mx-auto">
+          Daftar hal-hal indah dan impian manis yang ingin kita wujudkan bersama di usia barumu ini. Klik untuk mencentang!
+        </p>
+      </div>
+
+      <!-- Wishlist Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-16">
+        <template x-for="wish in wishes" :key="wish.id">
+          <div 
+            @click="toggleWish(wish)"
+            class="glass-card glass-card-hover rounded-2xl p-4 sm:p-5 flex items-start gap-4 cursor-pointer transition-all border"
+            :class="wish.completed ? 'bg-white/90 border-brand-pink-300' : 'bg-white/60 border-gray-100'"
+          >
+            <!-- Checkbox Circle -->
+            <div 
+              class="w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5 transition-colors border"
+              :class="wish.completed ? 'bg-brand-rose-500 border-brand-rose-500 text-white' : 'border-gray-300 bg-white text-transparent'"
+            >
+              <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+            </div>
+
+            <!-- Wish Text -->
+            <div class="flex-1">
+              <p 
+                class="text-sm sm:text-base font-medium transition-all"
+                :class="wish.completed ? 'text-gray-800' : 'text-gray-500'"
+                x-text="wish.text"
+              ></p>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <!-- Interactive Guest Wishes / Love Board -->
+      <div class="glass-card rounded-3xl p-6 sm:p-8">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-10 h-10 rounded-2xl bg-brand-rose-100 text-brand-rose-600 flex items-center justify-center">
+            <i data-lucide="message-square-heart" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-serif text-2xl font-bold text-gray-800">Tinggalkan Doa & Ucapan Manis</h3>
+            <p class="text-xs text-gray-500">Tuliskan pesanmu untuk melengkapi hari istimewa ini.</p>
+          </div>
+        </div>
+
+        <!-- Input Form -->
+        <div class="space-y-3 mb-8">
+          <input 
+            type="text" 
+            x-model="newNoteAuthor" 
+            placeholder="Namamu atau panggilan sayang (misal: Teman Terbaik / Ayang)" 
+            class="w-full px-4 py-3 rounded-xl bg-white/80 border border-gray-200 focus:border-brand-pink-400 focus:outline-none focus:ring-2 focus:ring-brand-pink-200 text-sm"
+          />
+          <textarea 
+            rows="3" 
+            x-model="newNoteMessage" 
+            placeholder="Tuliskan ucapan tulus, doa terbaik, atau kenangan lucu untuknya di sini..." 
+            class="w-full px-4 py-3 rounded-xl bg-white/80 border border-gray-200 focus:border-brand-pink-400 focus:outline-none focus:ring-2 focus:ring-brand-pink-200 text-sm resize-none"
+          ></textarea>
+          <div class="flex justify-end">
+            <button 
+              @click="addNote()" 
+              class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-medium text-white text-sm bg-gradient-to-r from-brand-pink-500 to-brand-rose-500 hover:from-brand-pink-600 hover:to-brand-rose-600 shadow-md transition-all active:scale-95"
+            >
+              <span>Kirimkan Doa 💌</span>
+              <i data-lucide="send" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Notes List -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <template x-for="note in notes" :key="note.id">
+            <div class="p-4 rounded-2xl border backdrop-blur-sm shadow-sm relative group" :class="note.color">
+              <div class="flex items-center justify-between mb-2">
+                <span class="font-bold text-xs uppercase tracking-wide text-gray-800" x-text="note.author"></span>
+                <span class="text-[10px] text-gray-400" x-text="note.date"></span>
+              </div>
+              <p class="font-handwriting text-xl text-gray-700 leading-snug" x-text="note.message"></p>
+              
+              <!-- Delete note button -->
+              <button 
+                @click="deleteNote(note.id)" 
+                class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity p-1 text-gray-400 hover:text-red-500"
+                title="Hapus pesan"
+              >
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </template>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ==========================================
+       FOOTER SECTION (Heartfelt Outro)
+       ========================================== -->
+  <footer class="relative py-16 px-4 z-10 text-center border-t border-brand-pink-100/60 mt-12 bg-white/40">
+    <div class="max-w-xl mx-auto space-y-4">
+      <div class="font-romantic text-4xl sm:text-5xl text-brand-rose-500">
+        Forever & Always With You
+      </div>
+      <p class="text-sm text-gray-500 leading-relaxed">
+        Dibuat dengan segenap cinta, doa tulus, dan rasa syukur yang tak terhingga untuk merayakan hadirnya dirimu di dunia ini.
+      </p>
+      <div class="flex items-center justify-center gap-1.5 text-xs text-gray-400 pt-4">
+        <span>Crafted with</span>
+        <i data-lucide="heart" class="w-3.5 h-3.5 text-brand-rose-500 fill-current"></i>
+        <span>for <strong class="text-gray-700" x-text="celebrant.name">Adelia Putri</strong> • 2026</span>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ==========================================
+       MODAL: FULL LETTER POPUP
+       ========================================== -->
+  <div 
+    x-show="letterModalOpen" 
+    x-transition:enter="transition ease-out duration-300"
+    x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100"
+    x-transition:leave="transition ease-in duration-200"
+    x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
+    style="display: none;"
+    @keydown.escape.window="closeFullLetter()"
+  >
+    <div 
+      @click.away="closeFullLetter()"
+      class="bg-[#FFFDF9] border border-brand-pink-200/80 rounded-3xl max-w-2xl w-full p-6 sm:p-10 shadow-2xl relative max-h-[90vh] overflow-y-auto"
+    >
+      <!-- Close button -->
+      <button 
+        @click="closeFullLetter()" 
+        class="absolute top-5 right-5 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-800 transition-colors"
+      >
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+
+      <!-- Letter Header -->
+      <div class="text-center pb-6 border-b border-brand-pink-100 mb-6">
+        <span class="font-romantic text-3xl sm:text-4xl text-brand-rose-500 block mb-1">Dearest One</span>
+        <h3 class="font-serif text-2xl font-bold text-gray-800">Selamat Ulang Tahun, <span x-text="celebrant.nickname">Sayang</span>! ✨</h3>
+        <p class="text-xs text-gray-400 mt-1">Surat untuk hari paling bahagiamu</p>
+      </div>
+
+      <!-- Letter Content in Handwriting Font -->
+      <div class="font-handwriting text-2xl sm:text-3xl text-gray-700 leading-relaxed space-y-4">
+        <p>
+          Hari ini, aku ingin mengucapkan terima kasih yang paling tulus kepada semesta karena telah mengizinkan dirimu hadir di dunia ini, dan lebih dari itu, mengizinkan kita untuk saling menemukan.
+        </p>
+        <p>
+          Melihat caramu tersenyum, mendengar caramu tertawa, dan merasakan bagaimana kebaikan hatimu selalu mampu menenangkan badai—semua itu adalah hadiah terindah yang pernah ada.
+        </p>
+        <p>
+          Di usiamu yang baru ini, doaku sangat sederhana: semoga langkahmu selalu diringankan, hatimu selalu dilapangkan, dan impian-impian besarmu didekatkan. Jangan pernah ragu pada kemampuanmu, karena kamu jauh lebih kuat dan hebat dari yang pernah kamu bayangkan.
+        </p>
+        <p>
+          Apapun yang akan terjadi di masa depan, ingatlah bahwa kamu tidak pernah berjalan sendirian. Aku akan selalu ada di sini, menjadi pendengar setiamu, tempatmu bercerita, dan orang yang paling bangga merayakan setiap keberhasilanmu.
+        </p>
+        <p class="pt-4 text-right">
+          Dengan seluruh rasa sayang,<br>
+          <span class="font-serif text-lg font-bold text-brand-rose-500">Selamanya Menemanimu ❤️</span>
+        </p>
+      </div>
+
+      <!-- Footer Stamp -->
+      <div class="mt-8 pt-4 border-t border-brand-pink-100 flex items-center justify-between text-xs text-gray-400">
+        <span class="flex items-center gap-1">
+          <i data-lucide="map-pin" class="w-3.5 h-3.5 text-brand-rose-400"></i>
+          <span>Di Sudut Hati Paling Hangat</span>
+        </span>
+        <button 
+          @click="closeFullLetter()" 
+          class="px-5 py-2 rounded-full bg-brand-rose-500 hover:bg-brand-rose-600 text-white font-medium text-xs shadow-md transition-all"
+        >
+          Tutup Surat
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================
+       MODAL: PHOTO DETAIL SHOWCASE
+       ========================================== -->
+  <div 
+    x-show="photoModalOpen" 
+    x-transition:enter="transition ease-out duration-300"
+    x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100"
+    x-transition:leave="transition ease-in duration-200"
+    x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md"
+    style="display: none;"
+    @keydown.escape.window="closePhotoModal()"
+  >
+    <div 
+      @click.away="closePhotoModal()"
+      class="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl relative"
+    >
+      <!-- Close button -->
+      <button 
+        @click="closePhotoModal()" 
+        class="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-white/80 hover:bg-white backdrop-blur-md flex items-center justify-center text-gray-700 shadow-md transition-colors"
+      >
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+
+      <!-- Full Photo -->
+      <div class="relative max-h-[60vh] bg-black overflow-hidden flex items-center justify-center">
+        <img :src="selectedPhoto.src" :alt="selectedPhoto.title" class="w-full h-full object-contain">
+      </div>
+
+      <!-- Photo Caption & Story -->
+      <div class="p-6">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="font-serif text-2xl font-bold text-gray-800" x-text="selectedPhoto.title"></h3>
+          <span class="text-xs text-gray-400 font-medium" x-text="selectedPhoto.date"></span>
+        </div>
+        <p class="text-gray-600 text-sm leading-relaxed mb-6 font-light" x-text="selectedPhoto.caption"></p>
+        
+        <div class="flex items-center justify-between border-t border-gray-100 pt-4">
+          <button 
+            @click="likePhoto(selectedPhoto)"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-pink-200 bg-pink-50 hover:bg-pink-100 text-brand-rose-500 font-medium text-xs transition-colors"
+          >
+            <i data-lucide="heart" class="w-4 h-4 fill-current"></i>
+            <span>Sukai Momen Ini (<span x-text="selectedPhoto.likes"></span>)</span>
+          </button>
+
+          <button 
+            @click="closePhotoModal()"
+            class="text-xs text-gray-500 hover:text-gray-800"
+          >
+            Kembali ke Album
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ==========================================
+       FLOATING MUSIC PLAYER WIDGET
+       ========================================== -->
+  <div class="fixed bottom-6 right-6 z-40">
+    <div class="glass-pill rounded-full p-2 pr-4 flex items-center gap-3 border border-white/80 shadow-xl shadow-brand-pink-200/30">
+      
+      <!-- Spinning Mini Vinyl Record -->
+      <button 
+        @click="toggleMusic()" 
+        class="relative w-11 h-11 rounded-full bg-gray-900 border-2 border-white shadow-md flex items-center justify-center cursor-pointer shrink-0 transition-transform active:scale-95"
+        :class="{ 'animate-spin-slow': isPlayingMusic }"
+        title="Klik untuk memutar / menjeda lagu"
+      >
+        <!-- Vinyl grooves -->
+        <div class="w-7 h-7 rounded-full border border-gray-700 flex items-center justify-center">
+          <div class="w-3.5 h-3.5 rounded-full bg-brand-rose-400 border border-white"></div>
+        </div>
+      </button>
+
+      <!-- Song Info & Wave bars -->
+      <div class="cursor-pointer select-none" @click="toggleMusic()">
+        <div class="flex items-center gap-1.5">
+          <span class="text-xs font-bold text-gray-800 tracking-tight">Sweet Melody</span>
+          <!-- Animated sound waves when playing -->
+          <div x-show="isPlayingMusic" class="flex items-end gap-0.5 h-3">
+            <span class="sound-bar"></span>
+            <span class="sound-bar"></span>
+            <span class="sound-bar"></span>
+            <span class="sound-bar"></span>
+          </div>
+        </div>
+        <span class="text-[10px] text-gray-400 block -mt-0.5" x-text="isPlayingMusic ? 'Now Playing 🎵' : 'Tap to Play 🎶'"></span>
+      </div>
+
+      <!-- Play / Pause Icon Button -->
+      <button 
+        @click="toggleMusic()" 
+        class="w-7 h-7 rounded-full bg-brand-pink-100 hover:bg-brand-pink-200 text-brand-pink-600 flex items-center justify-center transition-colors ml-1"
+      >
+        <template x-if="isPlayingMusic">
+          <i data-lucide="pause" class="w-3.5 h-3.5 fill-current"></i>
+        </template>
+        <template x-if="!isPlayingMusic">
+          <i data-lucide="play" class="w-3.5 h-3.5 fill-current ml-0.5"></i>
+        </template>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Background Music Audio Element (Optional custom MP3 support) -->
+  <audio id="bg-music" loop preload="none"></audio>
+
+  <!-- Initialize Lucide Icons -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    });
+
+    // Re-initialize icons whenever Alpine updates DOM
+    document.addEventListener('alpine:initialized', () => {
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    });
+  </script>
+
+</body>
+</html>
